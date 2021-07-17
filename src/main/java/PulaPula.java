@@ -51,7 +51,7 @@ public class PulaPula {
             }
         }
         System.out.println("Não existe conta com esse nome!");
-        mostraPP();
+        //mostraPP();
         return null;
     }
 
@@ -66,28 +66,28 @@ public class PulaPula {
         for (Crianca element : filaDeEspera) {
             if(crianca.getName().equals(element.getName())){
                 System.out.println("Já existe criança com mesmo nome na fila!");
-                mostraPP();
+                //mostraPP();
                 return false;
             }
         }
         filaDeEspera.add(crianca);
         System.out.println(crianca + " entrou na fila!");
-        mostraPP();
+        //mostraPP();
         return true;
     }
 
     public boolean entrar() {
         if(filaDeEspera.isEmpty()){
             System.out.println("Não há crianças na fila de espera!");
-            mostraPP();
+            //mostraPP();
             return false;
         }else if(criancasPulando.size() >= limiteMax){
             System.out.println("O pula pula está lotado!");
-            mostraPP();
+            //mostraPP();
             return false;
         }else{
             System.out.println("Vez do(a) " + filaDeEspera.get(0).getName() + "!");
-            mostraPP();
+            //mostraPP();
             for (Conta element : contas) {
                 if(filaDeEspera.get(0).getName().equals(element.getNome())){
                     System.out.println(filaDeEspera.get(0).getName() + " já tem conta!");
@@ -95,7 +95,7 @@ public class PulaPula {
                     filaDeEspera.remove(0);
                     System.out.println("Saui da fila e entrou no PP!!");
                     element.setValor();
-                    mostraPP();
+                    //mostraPP();
                     return true;
                 }
             }
@@ -114,41 +114,64 @@ public class PulaPula {
     public boolean sair() {
         if(criancasPulando.isEmpty()){
             System.out.println("Não há crianças pulando para sair!");
-            mostraPP();
+            //mostraPP();
             return false;
         }else{
-            System.out.println("Estão pulando para sair!");
-            mostraPP();
+            System.out.println("Está pulando!");
+            //mostraPP();
             filaDeEspera.add(criancasPulando.get(0));
             criancasPulando.remove(0);
             System.out.println("Saiu do PP para Fila!");
-            mostraPP();
+            //mostraPP();
             return true;
         }
         
     }
-
-    public boolean papaiChegou(String name) {
+    
+    public boolean criancaNaFila(String name) {
         for (Crianca crianca : filaDeEspera) {
-            if(crianca.getName().equals(name)){
-                System.out.println("Não chegou a entrar no PP, logo não tem conta a pagar!");
-                mostraPP();
-                filaDeEspera.remove(crianca);
-                System.out.println("O pai tiruou a criança da fila! Xau!");
-                mostraPP();
+            if (crianca.getName().equals(name)){
+                System.out.println("crianca na fila");
                 return true;
             }
         }
-        for( Crianca element : criancasPulando){
-            if(element.getName().equals(name)){
-                System.out.println("Criança " + element.getName() + " está pulando!");
-                criancasPulando.remove(element);
-                setCaixa(getConta(name));
-                System.out.println("Criança " + element.getName() + " saiu do PP!"
-                                    + " A conta foi paga pelo pai!"
-                                    + " E foram embora! Gracias!");
+        System.out.println("crianca não tá na fila");
+        return false;
+    }
+
+    public boolean criancaNoPula(String name) {
+        for (Crianca crianca : criancasPulando) {
+            if (crianca.getName().equals(name)){
+                System.out.println("crianca no PP");
+                return true;
+            } 
+        }
+        System.out.println("crianca nao ta no PP");
+        return false;
+    }
+
+    public boolean temConta(String Name) {
+        for (Conta conta : contas) {
+            if(conta.getNome().equals(Name)){
+                System.out.println("Tem conta");
                 return true;
             }
+        }
+        System.out.println("Nao tem conta");
+        return false;
+    }
+
+    public boolean papaiChegou(String name) {
+        if(criancaNaFila(name)){
+            if(temConta(name)){
+                setCaixa(getConta(name));
+                return true;
+            }
+            return true;
+        }
+        if(criancaNoPula(name)){
+            setCaixa(getConta(name));
+            return true;
         }
         return false;
     }
